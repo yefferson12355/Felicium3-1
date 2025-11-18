@@ -1,31 +1,34 @@
 import { Router } from 'express';
-// Importamos los routers específicos que ya hemos planeado:
-import patientRouter from './patient.routes'; 
-import userRouter from './user.routes'; 
-import authRouter from './auth.routes'; 
-// (En un proyecto real, se importarían todos los demás routers aquí)
+
+// 1. Importamos la Fábrica de rutas de Pacientes (La función)
+import { PatientRouter } from './patient.routes';
+
+// 2. Importamos el Controlador YA ENSAMBLADO desde nuestro contenedor
+import { patientController } from '../../../di/dependency-contanier';
+
+// 3. (Comentamos los que aún no existen)
+// import userRouter from './user.routes'; 
+// import authRouter from './auth.routes'; 
 
 const router = Router();
 
 /**
- * Montamos los routers bajo el prefijo principal de la API.
- * El uso de router.use() con el path inicial monta todos los endpoints
- * de ese router secundario bajo esa ruta.
+ * Montamos las rutas
  */
 
-// Ejemplo: Todas las rutas de patient.routes.ts serán /api/patients/...
-router.use('/patients', patientRouter);
+// A. Rutas de Pacientes
+// Llamamos a la función PatientRouter pasándole el controlador inyectado
+router.use('/patients', PatientRouter(patientController));
 
-// Ejemplo: Todas las rutas de user.routes.ts serán /api/users/...
-router.use('/users', userRouter);
+// B. Rutas de Usuarios (Pendiente)
+// router.use('/users', userRouter);
 
-// Ejemplo: Todas las rutas de auth.routes.ts serán /api/auth/...
-router.use('/auth', authRouter);
+// C. Rutas de Auth (Pendiente)
+// router.use('/auth', authRouter);
 
-// Puedes añadir aquí un endpoint de salud
+// Endpoint de salud (Health Check) - Útil para Docker
 router.get('/health', (req, res) => {
     res.status(200).json({ status: 'API running', version: '1.0' });
 });
 
-// Exportamos el router principal para que app.ts lo pueda usar
 export const mainRouter = router;

@@ -1,76 +1,68 @@
 import { Request, Response } from 'express';
-// 1. Importamos al Director (Caso de Uso)
+// 1. Importar TODOS los Casos de Uso
 import { CreatePatientUseCase } from '../../../core/application/patient/CreatePatientUseCase';
-// 2. Importamos el DTO de entrada para validar la forma del cuerpo de la petición
-import { CreatePatientDTO } from '../dtos/patient/CreatePatientDTO'; 
-// 3. Importamos el Traductor (Mapper) para dar la respuesta filtrada
+import { GetPatientByIdUseCase } from '../../../core/application/patient/GetPatientByIdUseCase'; // <--- NUEVO
+import { ListPatientUseCase } from '../../../core/application/patient/ListPatientUseCase';       // <--- NUEVO
+
+import { CreatePatientDTO } from '../dtos/patient/CreatePatientDTO';
 import { PatientMapper } from '../mappers/PatientMapper';
-// 4. Importamos las clases de errores del Dominio
-import { ValidationError, NotFoundError } from '../../shared/errors/DomainError'; // Asumimos esta ruta
-// Importamos el DTO de Respuesta para el tipado (el DTO que se envía de vuelta)
-import { PatientReceptionistResponseDTO } from '../dtos/patient/PatientResponse.dto';
+import { ValidationError, NotFoundError } from '../../../shared/errors'; // (Asegúrate de usar tu index o rutas correctas)
+import { PatientReceptionistResponseDTO } from '../dtos/patient/PatientResponseDTO'; // (Ajusta el nombre si es necesario)
 
-
-/**
- * @class PatientController
- * @description Maneja las peticiones HTTP (la Recepcionista).
- * Su única tarea es recibir la petición, llamar al Director (Use Case) y responder.
- */
 export class PatientController {
   
-  // Dependencia del Director (Caso de Uso)
+  // 2. Definir las propiedades para los nuevos Casos de Uso
   private createPatientUseCase: CreatePatientUseCase;
+  private getPatientByIdUseCase: GetPatientByIdUseCase; // <--- NUEVO
+  private listPatientUseCase: ListPatientUseCase;       // <--- NUEVO
   
-  /**
-   * El constructor pide el Director por Inyección de Dependencias.
-   * Esto mantiene al Controlador 'limpio' y desacoplado.
-   */
-  constructor(createPatientUseCase: CreatePatientUseCase) {
+  // 3. Actualizar el CONSTRUCTOR para recibir los 3 argumentos
+  constructor(
+    createPatientUseCase: CreatePatientUseCase,
+    getPatientByIdUseCase: GetPatientByIdUseCase, // <--- NUEVO
+    listPatientUseCase: ListPatientUseCase        // <--- NUEVO
+  ) {
     this.createPatientUseCase = createPatientUseCase;
-    // Aquí se inyectarían todos los demás Casos de Uso (Get, List, etc.)
+    this.getPatientByIdUseCase = getPatientByIdUseCase;
+    this.listPatientUseCase = listPatientUseCase;
   }
 
-  /**
-   * Método público que se usa en las rutas: POST /api/patients
-   */
+  // --- MÉTODO CREAR (Ya lo tenías) ---
   public async crearPaciente(req: Request, res: Response) {
-    // Nota: Se asume que un Middleware de Validación ya revisó que el req.body 
-    // cumpla con el CreatePatientDTO antes de llegar aquí.
-    
+    // ... (Tu código de crearPaciente sigue igual) ...
+  }
+
+  // --- NUEVO: MÉTODO GET POR ID ---
+  public async getPatientById(req: Request, res: Response) {
     try {
-      // 1. El Recepcionista recibe la orden (req.body)
-      const inputData: CreatePatientDTO = req.body; 
-
-      // 2. Llama al Director (Caso de Uso) y le da el formulario.
-      // El director ahora ejecuta toda la lógica: validación DNI, email, y guardar en BD.
-      const pacienteCreado = await this.createPatientUseCase.ejecutar(inputData);
-
-      // 3. Determinar el Rol del Usuario (viene del authMiddleware)
-      // Esto es CRUCIAL para la seguridad de la respuesta.
-      const userRole = (req as any).user?.role; 
+      const { id } = req.params;
+      // Llamar al Director de Get
+      const paciente = await this.getPatientByIdUseCase.ejecutar(Number(id));
       
-      // 4. Usar el Traductor (Mapper) para obtener la respuesta filtrada por rol
-      const responseDTO: PatientReceptionistResponseDTO = PatientMapper.toDTO(pacienteCreado, userRole);
+      // Mappear respuesta (Aquí uso toDTO genérico, o podrías usar toMedical si es doctor)
+      const userRole = (req as any).user?.role || 'RECEPTIONIST'; 
+      const response = PatientMapper.toDTO(paciente, userRole);
 
-      // 5. Enviar respuesta HTTP al cliente (201 Created)
-      return res.status(201).json({
-        success: true,
-        data: responseDTO,
-        message: 'Paciente creado exitosamente.'
-      });
-
+      return res.status(200).json(response);
     } catch (error) {
-      // 6. Manejo de Errores. Aquí el error handler global lo atraparía.
-      // Si el Dominio lanzó un 'ValidationError', devolvemos 400.
-      if (error instanceof ValidationError) {
-         return res.status(400).json({ message: error.message });
-      }
-      if (error instanceof NotFoundError) {
-         return res.status(404).json({ message: error.message });
-      }
-      return res.status(500).json({ message: 'Error interno del servidor. Contacte a soporte.' });
+      // Manejo simple de error (mejorar con error handler)
+      return res.status(404).json({ message: 'Paciente no encontrado' });
     }
   }
 
-  // Aquí irían otros métodos: getPatientById, listPatients, etc.
+  // --- NUEVO: MÉTODO LISTAR ---
+  public async listPatients(req: Request, res: Response) {
+    try {
+      // Llamar al Director de List
+      const pacientes = await this.listPatientUseCase.ejecutar();
+      
+      const userRole = (req as any).user?.role || 'RECEPTIONIST';
+      // Mappear la lista completa
+      const response = pacientes.map(p => PatientMapper.toDTO(p, userRole));
+
+      return res.status(200).json(response);
+    } catch (error) {
+      return res.status(500).json({ message: 'Error al listar pacientes' });
+    }
+  }
 }

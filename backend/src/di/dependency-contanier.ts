@@ -1,29 +1,29 @@
-// (Código omitido: Importaciones de Repositorio y Casos de Uso)
+import { pgClient } from '../infrastructure/config/database.config';
+import { PatientRepository } from '../infrastructure/database/postgres/PatientRepository';
 
-// Importamos todos los Controladores para crear sus instancias
+import { CreatePatientUseCase } from '../core/application/patient/CreatePatientUseCase';
+import { GetPatientByIdUseCase } from '../core/application/patient/GetPatientByIdUseCase';
+import { ListPatientUseCase } from '../core/application/patient/ListPatientUseCase';
+import { UpdatePatientUseCase } from '../core/application/patient/UpdatePatientUseCase';
+import { DeletePatientUseCase } from '../core/application/patient/DeletePatientUseCase';
+
 import { PatientController } from '../interfaces/http/controllers/patient.controller';
-//import { AppointmentController } from '../interfaces/http/controllers/appointment.controller';
-// ... otros controladores ...
 
-// A. Repositorios (Inyección de la conexión DB)
+// --- A. Repositorios ---
 const patientRepository = new PatientRepository(pgClient);
-// ...
 
-// B. Casos de Uso (Inyección del Repositorio)
-// Creamos una instancia de CADA CASO DE USO para la inyección:
+// --- B. Casos de Uso ---
 export const createPatientUseCase = new CreatePatientUseCase(patientRepository);
 export const getPatientByIdUseCase = new GetPatientByIdUseCase(patientRepository);
 export const listPatientUseCase = new ListPatientUseCase(patientRepository);
-// ... y todos los demás...
+export const updatePatientUseCase = new UpdatePatientUseCase(patientRepository);
+export const deletePatientUseCase = new DeletePatientUseCase(patientRepository);
 
-// C. Controladores (Inyección de Casos de Uso)
-// Creamos la instancia del Controlador, inyectando todos los directores necesarios.
-// NOTA: Solo inyectamos los Use Cases necesarios para ese Controlador (CRUD Paciente).
+// --- C. Controladores ---
 export const patientController = new PatientController(
   createPatientUseCase,
   getPatientByIdUseCase,
-  listPatientUseCase
-  // Aquí se inyectarían los demás Casos de Uso de Update/Delete
+  listPatientUseCase,
+  updatePatientUseCase,
+  deletePatientUseCase
 );
-
-// Aquí irían otros controladores (ej: authController)
