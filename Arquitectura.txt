@@ -110,6 +110,7 @@ C:.
 │   │   │       │   ├── 📄 auth.routes.ts               # 🔐 Rutas autenticación
 │   │   │       │   ├── 📄 patient.routes.ts            # 👤 Rutas pacientes
 │   │   │       │   └── 📄 user.routes.ts               # 👥 Rutas usuarios
+                        📄 index.routes.ts
 │   │   │       │
 │   │   │       ├── 📂 dtos/            # 📦 DATA TRANSFER OBJECTS
 │   │   │       │   ├── 📂 appointment/ # 🏥 DTOs CITAS
