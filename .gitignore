@@ -1,0 +1,11 @@
+# Ignore all files in the project_docs directory 
+backend/project_docs/*
+
+#Ignorar archivos dentro de backend 
+backend/Arquitetura.txt
+
+# Dependencias
+node_modules/
+
+# Variables de entorno (claves secretas)
+.env

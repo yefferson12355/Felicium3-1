@@ -1,0 +1,321 @@
+C:.
+├── 📄 .env                              # 🔐 VARIABLES ENTORNO (BD, JWT, etc.)
+├── 📄 docker-compose.yml               # 🐳 ORQUESTACIÓN CONTAINERS
+├── 📄 README.md                        # 📖 DOCUMENTACIÓN PRINCIPAL
+│
+├── 📂 backend/                         # 🚀 BACKEND NODE.JS + TYPESCRIPT
+│   ├── 📄 app.ts                       # 🏗️ CONFIGURACIÓN EXPRESS + MIDDLEWARES
+│   ├── 📄 backend.md                   # 📚 DOCUMENTACIÓN BACKEND
+│   ├── 📄 Dockerfile                   # 🐳 CONTAINER BACKEND
+│   ├── 📄 eslint.config.js             # 🔍 CONFIGURACIÓN LINTER
+│   ├── 📄 healthcheck.js               # ❗VERIFICACIÓN SALUD API
+│   ├── 📄 init.sql                     # 🗃️ INICIALIZACIÓN BASE DE DATOS
+│   ├── 📄 package-lock.json            # 🔒 LOCK DEPENDENCIAS
+│   ├── 📄 package.json                 # 📦 DEPENDENCIAS Y SCRIPTS
+│   ├── 📄 server.ts                    # 🌐 SERVIDOR HTTP PRINCIPAL
+│   ├── 📄 tsconfig.json                # ⚙️ CONFIGURACIÓN TYPESCRIPT
+│   │
+│   ├── 📂 src/                         # 🔥 CÓDIGO FUENTE REESTRUCTURADO
+│   │   ├── 📂 core/                    # 🎯 NÚCLEO PURAMENTE LÓGICA DE NEGOCIO
+│   │   │   ├── 📂 application/         # 📋 CASOS DE USO + CONTRATOS
+│   │   │   │   ├── 📂 appointment/     # 🏥 CASOS USO CITAS
+│   │   │   │   │   ├── 📄 CreateAppointmentUseCase.ts    # ➕ Crear cita médica
+│   │   │   │   │   ├── 📄 DeleteAppointmentUseCase.ts    # ❌ Eliminar cita
+│   │   │   │   │   ├── 📄 GetAppointmentByIdUseCase.ts   # 🔍 Obtener cita por ID
+│   │   │   │   │   ├── 📄 ListAppointmentUseCase.ts      # 📋 Listar todas citas
+│   │   │   │   │   ├── 📄 UpdateAppointmentUseCase.ts    # ✏️ Actualizar cita
+│   │   │   │   │   └── 📂 interfaces/
+│   │   │   │   │       └── 📄 IAppointmentRepository.ts  # 📝 Contrato repositorio citas
+│   │   │   │   │
+│   │   │   │   ├── 📂 auth/            # 🔐 CASOS USO AUTENTICACIÓN
+│   │   │   │   │   └── 📄 LoginUseCase.ts               # 🔑 Lógica login usuario
+│   │   │   │   │
+│   │   │   │   ├── 📂 patient/         # 👤 CASOS USO PACIENTES
+│   │   │   │   │   ├── 📄 CreatePatientUseCase.ts       # ➕ Crear paciente
+│   │   │   │   │   ├── 📄 DeletePatientUseCase.ts       # ❌ Eliminar paciente
+│   │   │   │   │   ├── 📄 GetPatientByIdUseCase.ts      # 🔍 Obtener paciente por ID
+│   │   │   │   │   ├── 📄 ListPatientUseCase.ts         # 📋 Listar todos pacientes
+│   │   │   │   │   ├── 📄 UpdatePatientUseCase.ts       # ✏️ Actualizar paciente
+│   │   │   │   │   └── 📂 interfaces/
+│   │   │   │   │       └── 📄 IPatientRepository.ts     # 📝 Contrato repositorio pacientes
+│   │   │   │   │
+│   │   │   │   ├── 📂 shared/          # 🔗 INTERFACES COMPARTIDAS
+│   │   │   │   │   └── 📂 interfaces/
+│   │   │   │   │       └── 📄 IAuthRepository.ts        # 📝 Contrato autenticación
+│   │   │   │   │
+│   │   │   │   └── 📂 user/            # 👥 CASOS USO USUARIOS
+│   │   │   │       ├── 📄 GetDoctorsUseCase.ts          # 🩺 Obtener lista doctores
+│   │   │   │       └── 📂 interfaces/
+│   │   │   │           └── 📄 IUserRepository.ts        # 📝 Contrato repositorio usuarios
+│   │   │   │
+│   │   │   └── 📂 domain/              # 🏛️ ENTIDADES + REGLAS DE NEGOCIO
+│   │   │       ├── 📂 src/core/domain/         # 🏛️ CORAZÓN DEL NEGOCIO (ENTIDADES PURAS)
+                ├── 📂 user/                 # 👥 Contexto de Actores y Autenticación
+                │   ├── 📄 user.entity.ts     # 🎯 Entidad central (email, pass, rol)
+                │   ├── 📄 doctor.entity.ts   # 🩺 Perfil Doctor (extiende a User con especialidad)
+                │   ├── 📄 receptionist.entity.ts # 🛎️ Perfil Recepcionista (extiende a User con turno)
+                │   └── 📄 administrator.entity.ts # 👑 Perfil Admin (extiende a User con nombre)
+                │
+                ├── 📂 patient/              # 👤 Contexto del Paciente y su Historial
+                │   ├── 📄 patient.entity.ts   # 🎯 Entidad Paciente (datos personales, reglas de email/DNI)
+                        📄 patient.rules.ts
+                        📄 patient.behavior.ts
+
+                │   ├── 📄 clinical-history.entity.ts # 📁 Entidad Historia Clínica (1-a-1 con Paciente)
+                        📄 clinical-history.behavior.ts
+
+                │   └── 📄 treatment-record.entity.ts # ✍️ Entidad RegistroTratamiento (Cada "visita" o "procedimiento" N-a-1)
+                        📄treatment-record.behavior.ts
+                │
+                ├── 📂 appointment/          # 🏥 Contexto de Agendamiento
+                │   ├── 📄 appointment.entity.ts # 🎯 Entidad Cita (reglas de agenda, estado, reprogramación)
+                │   └── 📄 consent.entity.ts       # ⚖️ Entidad Consentimiento (firma, tratamiento propuesto)
+                │
+                └── 📂 financial/            # 💸 Contexto de Facturación y Tratamientos
+                    ├── 📄 treatment.entity.ts   # 🦷 Entidad Tratamiento (costo total, descripción)
+                    ├── 📄 payment-plan.entity.ts # 💳 Entidad Plan de Pago (cuotas, monto total)
+                    └── 📄 payment.entity.ts     # 💵 Entidad Pago (abonos individuales a un plan/tratamiento)           # 📏 Reglas negocio usuario
+│   │   │
+│   │   ├── 📂 infrastructure/          # 🔌 ADAPTADORES EXTERNOS (IMPLEMENTACIONES)
+│   │   │   ├── 📂 auth/                # 🔐 SERVICIOS AUTENTICACIÓN
+│   │   │   │   ├── 📄 EncryptionService.ts              # 🔒 Servicio encriptación
+│   │   │   │   └── 📄 JwtService.ts                     # 🎫 Servicio JWT tokens
+│   │   │   │
+│   │   │   ├── 📂 config/              # ⚙️ CONFIGURACIONES
+│   │   │   │   ├── 📄 database.config.ts               # 🗃️ Configuración BD
+│   │   │   │   └── 📄 app.config.ts                    # ⚙️ Configuración aplicación
+│   │   │   │
+│   │   │   └── 📂 database/            # 💾 ACCESO A DATOS
+│   │   │       └── 📂 postgres/        # 🐘 IMPLEMENTACIÓN POSTGRESQL
+│   │   │           ├── 📄 AppointmentRepository.ts     # 💾 Repositorio citas
+│   │   │           ├── 📄 AuthRepository.ts            # 💾 Repositorio autenticación
+│   │   │           ├── 📄 PatientRepository.ts         # 💾 Repositorio pacientes
+│   │   │           └── 📄 UserRepository.ts            # 💾 Repositorio usuarios
+│   │   │
+│   │   ├── 📂 interfaces/              # 🌐 ADAPTADORES DE ENTRADA/SALIDA
+│   │   │   └── 📂 http/                # 🌍 CAPA HTTP
+│   │   │       ├── 📂 controllers/     # 🎮 CONTROLADORES
+│   │   │       │   ├── 📄 appointment.controller.ts    # 🏥 Endpoints citas
+│   │   │       │   ├── 📄 auth.controller.ts           # 🔐 Endpoints autenticación
+│   │   │       │   ├── 📄 patient.controller.ts        # 👤 Endpoints pacientes
+│   │   │       │   └── 📄 user.controller.ts           # 👥 Endpoints usuarios
+│   │   │       │
+│   │   │       ├── 📂 middlewares/     # 🛡️ MIDDLEWARES
+│   │   │       │   ├── 📄 audit.middleware.ts          # 📊 Middleware auditoría
+│   │   │       │   ├── 📄 auth.middleware.ts           # 🔐 Middleware autenticación
+│   │   │       │   └── 📄 error-handler.middleware.ts  # ❌ Middleware manejo errores
+│   │   │       │
+│   │   │       ├── 📂 routes/          # 🛣️ DEFINICIÓN RUTAS
+│   │   │       │   ├── 📄 appointment.routes.ts        # 🏥 Rutas citas
+│   │   │       │   ├── 📄 auth.routes.ts               # 🔐 Rutas autenticación
+│   │   │       │   ├── 📄 patient.routes.ts            # 👤 Rutas pacientes
+│   │   │       │   └── 📄 user.routes.ts               # 👥 Rutas usuarios
+│   │   │       │
+│   │   │       ├── 📂 dtos/            # 📦 DATA TRANSFER OBJECTS
+│   │   │       │   ├── 📂 appointment/ # 🏥 DTOs CITAS
+│   │   │       │   │   ├── 📄 CreateAppointmentDTO.ts  # 📝 DTO crear cita
+│   │   │       │   │   └── 📄 UpdateAppointmentDTO.ts  # 📝 DTO actualizar cita
+│   │   │       │   ├── 📂 auth/        # 🔐 DTOs AUTENTICACIÓN
+│   │   │       │   │   └── 📄 LoginDTO.ts              # 📝 DTO login
+│   │   │       │   └── 📂 patient/     # 👤 DTOs PACIENTES
+│   │   │       │       ├── 📄 CreatePatientDTO.ts      # 📝 DTO crear paciente
+│   │   │       │       └── 📄 PatientResponseDTO.ts    # 📝 DTO respuesta paciente
+│   │   │       │
+│   │   │       └── 📂 mappers/         # 🔄 CONVERSORES
+│   │   │           ├── 📄 AppointmentMapper.ts         # 🏥 Mapper citas
+│   │   │           ├── 📄 PatientMapper.ts             # 👤 Mapper pacientes
+│   │   │           └── 📄 UserMapper.ts                # 👥 Mapper usuarios
+│   │   │
+│   │   ├── 📂 shared/                  # 🔗 UTILIDADES COMPARTIDAS
+│   │   │   ├── 📂 errors/              # 🚨 ERRORES TIPADOS
+│   │   │   │   ├── 📄 DomainError.ts                   # ⚠️ Error dominio
+│   │   │   │   ├── 📄 NotFoundError.ts                 # 🔍 Error no encontrado
+│   │   │   │   └── 📄 ValidationError.ts               # 📏 Error validación
+│   │   │   │
+│   │   │   └── 📂 types/               # 📐 TIPOS COMPARTIDOS
+│   │   │       └── 📄 ApiResponse.ts                   # 📡 Tipo respuesta API
+│   │   │
+│   │   └── 📂 config/                  # ⚙️ CONFIGURACIÓN GLOBAL
+│   │       ├── 📄 database.config.ts                   # 🗃️ Configuración BD
+│   │       ├── 📄 jwt.config.ts                        # 🎫 Configuración JWT
+│   │       └── 📄 app.config.ts                        # ⚙️ Configuración app
+│   │
+│   ├── 📂 dist/                        # 📦 CÓDIGO COMPILADO (NO VERSIONAR)
+│   │   ├── 📄 app.js                   # 🔨 App compilada
+│   │   ├── 📄 app.js.map               # 🗺️ Source maps
+│   │   ├── 📄 server.js                # 🌐 Servidor compilado
+│   │   └── 📄 server.js.map            # 🗺️ Source maps
+│   │
+│   ├── 📂 migrations/                  # 🗃️ MIGRACIONES BASE DE DATOS
+│   │   └── 📄 001_patient_schema_update.sql           # 🔄 Actualización esquema pacientes
+│   │
+│   └── 📂 tests/                       # 🧪 PRUEBAS (NUEVO)
+│       ├── 📂 unit/                    # 🧪 PRUEBAS UNITARIAS
+│       │   ├── 📂 application/         # 🧪 Pruebas casos de uso
+│       │   └── 📂 domain/              # 🧪 Pruebas entidades
+│       │
+│       └── 📂 integration/             # 🧪 PRUEBAS INTEGRACIÓN
+│           ├── 📂 repositories/        # 🧪 Pruebas repositorios
+│           └── 📂 http/                # 🧪 Pruebas endpoints
+│
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+└── 📂 frontend/                        # ⚡ FRONTEND ANGULAR
+    ├── 📄 angular.json                 # ⚙️ CONFIGURACIÓN ANGULAR
+    ├── 📄 Dockerfile                   # 🐳 CONTAINER FRONTEND
+    ├── 📄 icon_felicium.png            # 🏢 LOGO APLICACIÓN
+    ├── 📄 nginx-simple.conf            # 🌐 CONFIG NGINX SIMPLE
+    ├── 📄 nginx.conf                   # 🌐 CONFIG NGINX COMPLETA
+    ├── 📄 package-lock.json            # 🔒 LOCK DEPENDENCIAS
+    ├── 📄 package.json                 # 📦 DEPENDENCIAS Y SCRIPTS
+    ├── 📄 pasos.txt                    # 📝 INSTRUCCIONES SETUP
+    ├── 📄 README.md                    # 📖 DOCUMENTACIÓN FRONTEND
+    ├── 📄 tsconfig.app.json            # ⚙️ TS CONFIG APP
+    ├── 📄 tsconfig.json                # ⚙️ TS CONFIG GENERAL
+    │
+    ├── 📂 environments/                # 🌍 CONFIGURACIÓN ENTORNOS
+    │   └── 📄 environment.ts           # ⚙️ Variables entorno desarrollo
+    │
+    └── 📂 src/                         # 🔥 CÓDIGO FUENTE FRONTEND
+        ├── 📄 index.html               # 🏠 HTML PRINCIPAL
+        ├── 📄 main.ts                  # 🚀 BOOTSTRAP APLICACIÓN
+        ├── 📄 styles.css               # 🎨 ESTILOS GLOBALES
+        │
+        ├── 📂 assets/                  # 🎨 RECURSOS ESTÁTICOS
+        │   └── 📄 icon_felicium.png    # 🏢 LOGO APLICACIÓN
+        │
+        ├── 📂 environments/            # 🌍 CONFIGURACIÓN ENTORNOS
+        │   └── 📄 environment.ts       # ⚙️ Variables entorno desarrollo
+        │
+        └── 📂 app/                     # 🎯 APLICACIÓN ANGULAR
+            ├── 📄 app.component.css    # 🎨 Estilos componente raíz
+            ├── 📄 app.component.html   # 🏗️ Template componente raíz
+            ├── 📄 app.component.ts     # 🎯 Componente raíz
+            ├── 📄 app.module.ts        # 🏗️ Módulo raíz
+            ├── 📄 app-routing.module.ts # 🗺️ Rutas principales
+            │
+            ├── 📂 core/                # 🎯 NÚCLEO (SINGLETON SERVICES)
+            │   ├── 📄 core.module.ts   # 🎯 Módulo core
+            │   │
+            │   ├── 📂 components/      # 🎨 COMPONENTES GLOBALES
+            │   │   └── 📂 landing/     # 🏠 COMPONENTE LANDING
+            │   │       └── 📄 landing.component.ts     # 🏠 Componente página inicio
+            │   │
+            │   ├── 📂 guards/          # 🛡️ GUARDS RUTAS
+            │   │   ├── 📄 auth.guard.ts                # 🔐 Guard autenticación
+            │   │   └── 📄 role.guard.ts                # 👥 Guard roles usuario
+            │   │
+            │   ├── 📂 interceptors/    # 🔄 INTERCEPTORS HTTP
+            │   │   ├── 📄 auth.interceptor.ts          # 🔐 Interceptor autenticación
+            │   │   └── 📄 error.interceptor.ts         # ❌ Interceptor errores
+            │   │
+            │   ├── 📂 models/          # 📐 MODELOS DATOS
+            │   │   ├── 📄 appointment.model.ts         # 🏥 Modelo cita
+            │   │   ├── 📄 patient.model.ts             # 👤 Modelo paciente
+            │   │   └── 📄 user.model.ts                # 👥 Modelo usuario
+            │   │
+            │   ├── 📂 resolvers/       # 🔍 RESOLVERS RUTAS
+            │   │   └── 📄 auth.resolver.ts             # 🔐 Resolver autenticación
+            │   │
+            │   └── 📂 services/        # 🔧 SERVICIOS GLOBALES
+            │       ├── 📄 api.service.ts               # 📡 Servicio comunicación API
+            │       └── 📄 auth.service.ts              # 🔐 Servicio autenticación
+            │
+            ├── 📂 features/            # 🚀 MÓDULOS POR FUNCIONALIDAD
+            │   ├── 📂 appointments/    # 🏥 MÓDULO CITAS MÉDICAS
+            │   │   ├── 📄 appointments.component.ts    # 🏠 Componente principal citas
+            │   │   ├── 📄 appointments.service.ts      # 🔧 Servicio state management
+            │   │   ├── 📄 appointments.module.ts       # 🏥 Módulo citas
+            │   │   ├── 📄 appointments-routing.module.ts # 🗺️ Rutas citas
+            │   │   ├── 📄 appointments-calendar.component.ts # 📅 Componente calendario
+            │   │   │
+            │   │   ├── 📂 appointment-form/            # 📝 FORMULARIO CITAS
+            │   │   │   └── 📄 appointment-form.component.ts # 📝 Componente formulario
+            │   │   │
+            │   │   ├── 📂 appointments-wrapper/        # 🏗️ WRAPPER CITAS
+            │   │   │   └── 📄 appointments-wrapper.component.ts # 🏗️ Componente wrapper
+            │   │   │
+            │   │   └── 📂 google-style-calendar/       # 📅 CALENDARIO ESTILO GOOGLE
+            │   │       └── 📄 google-style-calendar.component.ts # 📅 Componente calendario
+            │   │
+            │   ├── 📂 auth/            # 🔐 MÓDULO AUTENTICACIÓN
+            │   │   ├── 📄 auth.module.ts               # 🔐 Módulo autenticación
+            │   │   ├── 📄 auth-routing.module.ts       # 🗺️ Rutas autenticación
+            │   │   │
+            │   │   ├── 📂 auth-wrapper/                # 🏗️ WRAPPER AUTH
+            │   │   │   └── 📄 auth-wrapper.component.ts # 🏗️ Componente wrapper auth
+            │   │   │
+            │   │   └── 📂 login/                       # 🔑 LOGIN
+            │   │       ├── 📂 components/              # 🎨 COMPONENTES LOGIN
+            │   │       │   └── 📂 login-form/          # 📝 FORMULARIO LOGIN
+            │   │       │       ├── 📄 login-form.component.css    # 🎨 Estilos formulario
+            │   │       │       └── 📄 login-form.component.ts     # 📝 Componente formulario
+            │   │       │
+            │   │       └── 📂 containers/              # 🏗️ CONTAINERS LOGIN
+            │   │           └── 📂 login-container/     # 🏠 CONTAINER LOGIN
+            │   │               └── 📄 login-container.component.ts # 🏠 Componente container
+            │   │
+            │   ├── 📂 dashboard-page/  # 📊 MÓDULO DASHBOARD
+            │   │   ├── 📄 dashboard-page.component.ts  # 🏠 Componente página dashboard
+            │   │   ├── 📄 dashboard-page.module.ts     # 📊 Módulo dashboard
+            │   │   │
+            │   │   └── 📂 dashboard-content/           # 📊 CONTENIDO DASHBOARD
+            │   │       └── 📄 dashboard-content.component.ts # 📊 Componente contenido
+            │   │
+            │   └── 📂 patients/        # 👤 MÓDULO PACIENTES
+            │       ├── 📄 patients.module.ts           # 👤 Módulo pacientes
+            │       ├── 📄 patients-routing.module.ts   # 🗺️ Rutas pacientes
+            │       ├── 📄 patients.service.ts          # 🔧 Servicio state management
+            │       │
+            │       ├── 📂 components/                  # 🎨 COMPONENTES PACIENTES
+            │       │   ├── 📂 patient-form/            # 📝 FORMULARIO PACIENTE
+            │       │   │   └── 📄 patient-form.component.ts     # 📝 Componente formulario
+            │       │   │
+            │       │   └── 📂 patient-list/            # 📋 LISTA PACIENTES
+            │       │       ├── 📄 patient-list.component.html   # 🏗️ Template lista
+            │       │       └── 📄 patient-list.component.ts     # 📋 Componente lista
+            │       │
+            │       ├── 📂 patients-container/          # 🏗️ CONTAINER PACIENTES
+            │       │   └── 📄 patients-container.component.ts   # 🏗️ Componente container
+            │       │
+            │       ├── 📂 patients-wrapper/            # 🏗️ WRAPPER PACIENTES
+            │       │   └── 📄 patients-wrapper.component.ts     # 🏗️ Componente wrapper
+            │       │
+            │       └── 📂 services/                    # 🔧 SERVICIOS PACIENTES
+            │           └── 📄 patients.service.ts              # 🔧 Servicio pacientes
+            │
+            └── 📂 shared/              # 🔗 COMPARTIDO
+                ├── 📄 shared.module.ts                 # 🔗 Módulo shared
+                │
+                ├── 📂 components/      # 🎨 COMPONENTES COMPARTIDOS
+                │   ├── 📂 layout/      # 🏗️ COMPONENTE LAYOUT
+                │   │   └── 📄 layout.component.ts      # 🏗️ Componente layout
+                │   │
+                │   ├── 📂 navbar/      # 🧭 COMPONENTE NAVEGACIÓN
+                │   │   └── 📄 navbar.component.ts      # 🧭 Componente navbar
+                │   │
+                │   └── 📂 sidebar/     # 📁 COMPONENTE SIDEBAR
+                │       └── 📄 sidebar.component.ts     # 📁 Componente sidebar
+                │
+                └── 📂 services/        # 🔧 SERVICIOS COMPARTIDOS
+                    └── 📄 layout.service.ts            # 🔧 Servicio layout
