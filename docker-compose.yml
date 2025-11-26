@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # 🐘 BASE DE DATOS
+  postgres:
+    image: postgres:15-alpine
+    container_name: dental-db
+    ports:
+      - "5432:5432"
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dental-network
+
+  # 🚀 BACKEND (Configurado para Hot-Reload)
+  backend:
+    build: 
+      context: ./backend
+    container_name: dental-backend
+    working_dir: /app
+    # 1. Instala paquetes si faltan (útil si agregaste algo nuevo).
+    # 2. Corre el script 'dev' que usa ts-node-dev.
+    command: sh -c "npm install && npm run dev"
+    
+    ports:
+      - "3001:3000" # Accedes desde afuera por el 3001
+    
+    env_file: .env
+    environment:
+      - DB_HOST=postgres # Nombre del servicio de arriba
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - PORT=3000
+    
+    # --- SINCRONIZACIÓN DE ARCHIVOS ---
+    volumes:
+      - ./backend:/app       # Túnel: Tu código local se ve adentro
+      - /app/node_modules    # Burbuja: Protege las dependencias de Linux
+    
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - dental-network
+
+ 
+  #frontend:
+  #  build:
+  #  context: ./frontend
+  #  container_name: dental-frontend
+  # ports:
+  #  - "4200:80"
+  #  env_file: .env
+  #  networks:
+  #    - dental-network
+
+volumes:
+  postgres_data:
+
+networks:
+  dental-network:
+    driver: bridge
