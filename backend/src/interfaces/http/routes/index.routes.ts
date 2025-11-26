@@ -4,7 +4,7 @@ import { Router } from 'express';
 import { PatientRouter } from './patient.routes';
 
 // 2. Importamos el Controlador YA ENSAMBLADO desde nuestro contenedor
-import { patientController } from '../../../di/dependency-container';
+import { patientController } from '../../../di/dependency-contanier';
 
 // 3. (Comentamos los que aún no existen)
 // import userRouter from './user.routes'; 

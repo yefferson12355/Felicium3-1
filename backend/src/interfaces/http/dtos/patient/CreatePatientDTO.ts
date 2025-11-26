@@ -9,5 +9,5 @@ export interface CreatePatientDTO {
   telefono?: string;
   nombreApoderado?: string;
   direccion?: string;
-  observaciones?: string[];
+  observaciones?: string;
 }

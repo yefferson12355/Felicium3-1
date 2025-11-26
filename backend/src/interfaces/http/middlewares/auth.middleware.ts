@@ -1,4 +1,5 @@
-import { verifyToken } from '../../../infrastructure/auth/JwtService';
+// src/interfaces/http/middlewares/auth.middleware.ts
+
 import { Request, Response, NextFunction } from 'express';
 // (Asume que 'verifyToken' ya está importado desde infrastructure/auth/JwtService)
 

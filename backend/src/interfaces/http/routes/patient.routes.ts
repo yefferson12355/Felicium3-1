@@ -13,8 +13,8 @@ export const PatientRouter = (controller: PatientController) => {
     // RUTA: POST /api/patients
     router.post(
         '/',
-        //authMiddleware,                           
-        //requireRole(['ADMIN', 'RECEPCIONISTE']),  
+        authMiddleware,                           
+        requireRole(['ADMIN', 'RECEPCIONISTE']),  
         // Paso 3: Pasa la petición al controlador inyectado
         (req, res) => controller.crearPaciente(req, res) 
     );
@@ -22,15 +22,15 @@ export const PatientRouter = (controller: PatientController) => {
     // RUTA: GET /api/patients/:id
     router.get(
         '/:id',
-        //authMiddleware,
+        authMiddleware,
         (req, res) => controller.getPatientById(req, res) // Ahora 'controller' es el inyectado
     );
 
     // RUTA: GET /api/patients
     router.get(
         '/',
-        //authMiddleware,
-        //requireRole(['ADMIN', 'DOCTOR']),
+        authMiddleware,
+        requireRole(['ADMIN', 'DOCTOR']),
         (req, res) => controller.listPatients(req, res)
     );
 
