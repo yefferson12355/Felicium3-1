@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--Created with Inkscape (http://www.inkscape.org/)-->
+<svg version="1.1" id="svg1" xml:space="preserve" width="27.852631" height="27.852631" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+  <defs id="defs1"/>
+  <sodipodi:namedview id="namedview1" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1"/>
+  <inkscape:clipboard min="554.96447,196.4398" max="582.81711,224.29243" geom-min="555.39967,196.875" geom-max="582.38191,223.85724"/>
+  <g id="caras_pieza_41" transform="matrix(0.57565789,0,0,0.57565789,0.43519735,-12.229276)">
+    <circle id="cara_41_5" stroke="#000000" stroke-width="1.512" cx="23.436001" cy="45.436001" r="11.34" fill-opacity="0" fill="#008aca" style="display:block">
+      <title id="title2473">Oclusal</title>
+    </circle>
+    <path d="m 6.8642455,28.864245 8.5531635,8.553164 C 13.365273,39.469546 12.096,42.304546 12.096,45.436 c 0,3.130953 1.268866,5.965546 3.320423,8.017604 l -8.5521775,8.55415 C 2.6231637,57.766673 0,51.907673 0,45.436 0,38.964327 2.6231637,33.105327 6.8642455,28.864245 Z" id="cara_41_4" stroke="#000000" stroke-width="1.512" fill-opacity="0" fill="#008aca" style="display:block">
+      <title id="title2474">Distal</title>
+    </path>
+    <path d="m 23.436,56.776 c 3.131454,0 5.966454,-1.269273 8.018591,-3.321409 l 8.553163,8.553163 C 35.766673,66.248836 29.907673,68.872 23.436,68.872 16.964327,68.872 11.105327,66.248836 6.8642455,62.007754 L 15.417409,53.454591 C 17.469545,55.506727 20.304545,56.776 23.436,56.776 Z" id="cara_41_3" stroke="#000000" stroke-width="1.512" fill-opacity="0" fill="#008aca" style="display:block">
+      <title id="title2475">Vestibular</title>
+    </path>
+    <path d="M 40.007754,28.864245 C 44.248836,33.105327 46.872,38.964327 46.872,45.436 c 0,6.471673 -2.623164,12.330673 -6.864246,16.571754 L 31.454591,53.454591 C 33.506727,51.402454 34.776,48.567454 34.776,45.436 c 0,-3.131454 -1.269273,-5.966454 -3.321409,-8.018591 z" id="cara_41_2" stroke="#000000" stroke-width="1.512" fill-opacity="0" fill="#008aca" style="display:block">
+      <title id="title2476">Mesial</title>
+    </path>
+    <path d="m 23.436,22 c 6.471673,0 12.330673,2.623164 16.571754,6.864245 l -8.553163,8.553164 C 29.402454,35.365273 26.567454,34.096 23.436,34.096 c -3.131455,0 -5.966455,1.269273 -8.018591,3.321409 L 6.8642455,28.864245 C 11.105327,24.623164 16.964327,22 23.436,22 Z" id="cara_41_1" stroke="#000000" stroke-width="1.512" fill-opacity="0" fill="#008aca" style="display:block">
+      <title id="title2477">Lingual</title>
+    </path>
+  </g>
+</svg>

@@ -7,11 +7,13 @@
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
     "types": ["node", "express"]
   },
   "include": ["src/**/*"],

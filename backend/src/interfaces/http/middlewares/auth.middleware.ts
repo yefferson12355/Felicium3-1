@@ -1,9 +1,9 @@
 // src/interfaces/http/middlewares/auth.middleware.ts
 
 import { Request, Response, NextFunction } from 'express';
-// (Asume que 'verifyToken' ya está importado desde infrastructure/auth/JwtService)
+import { verifyToken as verifyJwtToken } from '../../../infrastructure/auth/JwtService';
 
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
@@ -12,7 +12,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
   try {
     // 1. Verificar y decodificar el token usando el servicio de Infraestructura
-    const decodedUser = verifyToken(token); 
+    const decodedUser = verifyJwtToken(token); 
     
     // 2. Adjuntar el usuario decodificado a la petición
     (req as any).user = decodedUser; 
@@ -24,3 +24,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     return res.status(401).json({ message: 'Token inválido o expirado.' });
   }
 };
+
+/**
+ * authMiddleware - Alias for use in app.use()
+ */
+export const authMiddleware = verifyToken;

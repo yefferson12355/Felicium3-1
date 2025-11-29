@@ -1,0 +1,11 @@
+<svg xml:space="preserve" width="19.359" height="63.485" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <linearGradient x1="0%" y1="0%" x2="0%" y2="100%" id="a">
+      <stop stop-color="#F9F7F7" offset="0%"/>
+      <stop stop-color="#F1F1F1" offset="100%"/>
+    </linearGradient>
+  </defs>
+  <path d="M18.1.5C11 .9 3.9.1 1.2 5.9s.5 18.1.9 19.5 4 15.5 4.4 18.1 2 13.1 2.7 19.9 1.6 32.7 1.5 35.6.6 10.4 2.9 10.4c5.5.1 6-11.8 7.9-24.2l1.6-36.1 1.4-4.9S31 21.7 32 14.5c0 0 1.9-10.8-.6-12.8S18.7.4 18.1.5" fill="url(#a)" transform="translate(.218 .116)scale(.5766)"/>
+  <path d="M10.654.405C6.56.635 2.467.175.91 3.518s.288 10.437.519 11.244 2.306 8.937 2.537 10.436 1.153 7.554 1.557 11.475.922 18.855.864 20.527.346 5.996 1.673 5.996c3.17.058 3.46-6.803 4.555-13.953l.922-20.816.808-2.825s3.747-12.973 4.324-17.125c0 0 1.096-6.227-.346-7.38S11 .347 10.654.405z" stroke="#9f9f9f" stroke-linejoin="round" stroke-width=".577" fill="none"/>
+  <path d="M3.908 16.033c1.038.116 1.442.462 2.306.923.75.404 1.673.404 2.48.461 1.499.116 2.998.23 4.267-.576a16 16 0 0 1 1.73-.923" stroke="#9f9f9f" stroke-linejoin="round" stroke-width=".577" fill="none"/>
+</svg>

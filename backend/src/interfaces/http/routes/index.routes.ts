@@ -1,14 +1,14 @@
 import { Router } from 'express';
 
-// 1. Importamos la Fábrica de rutas de Pacientes (La función)
+// 1. Importamos la Fábrica de rutas
 import { PatientRouter } from './patient.routes';
+import { createOdontogramRoutes } from './odontogram.routes';
+import { createAuthRoutes } from './auth.routes';
+import { createAppointmentRoutes } from './appointment.routes';
+import { createDashboardRoutes } from './dashboard.routes';
 
-// 2. Importamos el Controlador YA ENSAMBLADO desde nuestro contenedor
-import { patientController } from '../../../di/dependency-contanier';
-
-// 3. (Comentamos los que aún no existen)
-// import userRouter from './user.routes'; 
-// import authRouter from './auth.routes'; 
+// 2. Importamos los Controladores YA ENSAMBLADOS desde nuestro contenedor
+import { patientController, odontogramController, authController, appointmentController, dashboardController } from '../../../di/dependency-container';
 
 const router = Router();
 
@@ -16,15 +16,20 @@ const router = Router();
  * Montamos las rutas
  */
 
-// A. Rutas de Pacientes
-// Llamamos a la función PatientRouter pasándole el controlador inyectado
+// A. Rutas de Autenticación
+router.use('/auth', createAuthRoutes(authController));
+
+// B. Rutas de Pacientes
 router.use('/patients', PatientRouter(patientController));
 
-// B. Rutas de Usuarios (Pendiente)
-// router.use('/users', userRouter);
+// C. Rutas de Odontogramas
+router.use('/odontogram', createOdontogramRoutes(odontogramController));
 
-// C. Rutas de Auth (Pendiente)
-// router.use('/auth', authRouter);
+// D. Rutas de Citas
+router.use('/appointments', createAppointmentRoutes(appointmentController));
+
+// E. Rutas de Dashboard
+router.use('/dashboard', createDashboardRoutes(dashboardController));
 
 // Endpoint de salud (Health Check) - Útil para Docker
 router.get('/health', (req, res) => {

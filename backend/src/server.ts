@@ -17,9 +17,14 @@ async function startServer() {
     console.log("✅ Base de Datos Conectada exitosamente.");
 
     // 2. ENCENDER EL SERVIDOR WEB
-    app.listen(port, () => {
+    const server = app.listen(port, () => {
       console.log(`🚀 Servidor de la Clínica corriendo en http://localhost:${port}`);
       console.log("---------------------------------------------------------");
+    });
+
+    // Manejo de errores del servidor
+    server.on('error', (err: any) => {
+      console.error("❌ ERROR en el servidor:", err);
     });
 
   } catch (error) {

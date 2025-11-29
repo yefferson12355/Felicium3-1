@@ -14,7 +14,7 @@ export const PatientRouter = (controller: PatientController) => {
     router.post(
         '/',
         authMiddleware,                           
-        requireRole(['ADMIN', 'RECEPCIONISTE']),  
+        requireRole(['ADMIN', 'RECEPTIONIST', 'RECEPCIONISTE']),  
         // Paso 3: Pasa la petición al controlador inyectado
         (req, res) => controller.crearPaciente(req, res) 
     );
@@ -30,7 +30,7 @@ export const PatientRouter = (controller: PatientController) => {
     router.get(
         '/',
         authMiddleware,
-        requireRole(['ADMIN', 'DOCTOR']),
+        requireRole(['ADMIN', 'DOCTOR', 'RECEPTIONIST']),
         (req, res) => controller.listPatients(req, res)
     );
 

@@ -4,6 +4,8 @@ import { Paciente } from '../../domain/patient/patient.entity';
 import { ComportamientoPaciente } from '../../domain/patient/patient.behavior';
 // Asumimos que existe el DTO (aunque lo crearemos luego)
 import { UpdatePatientDTO } from '../../../interfaces/http/dtos/patient/UpdatePatientDTO';
+// ✅ NUEVO: Importamos el validador de firmas
+import { SignatureValidator } from '../../../shared/validators/signature.validator';
 
 export class UpdatePatientUseCase {
   constructor(private readonly repository: IPatientRepository) {}
@@ -14,6 +16,14 @@ export class UpdatePatientUseCase {
 
     if (!paciente) {
       throw new Error(`Paciente con ID ${id} no encontrado.`);
+    }
+
+    // ✅ NUEVO: Si se intenta cambiar firma, validar que sea válida
+    if (datos.firmaDigital) {
+      const validationResult = SignatureValidator.validate(datos.firmaDigital);
+      if (!validationResult.valid) {
+        throw new Error(validationResult.error);
+      }
     }
 
     // 2. Usar el COMPORTAMIENTO (Chef) para aplicar los cambios

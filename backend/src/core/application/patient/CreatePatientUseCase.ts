@@ -10,6 +10,9 @@ import { Paciente } from '../../domain/patient/patient.entity';
 // Importamos el DTO
 import { CreatePatientDTO } from '../../../interfaces/http/dtos/patient/CreatePatientDTO';
 
+// ✅ NUEVO: Importamos el validador de firmas
+import { SignatureValidator } from '../../../shared/validators/signature.validator';
+
 export class CreatePatientUseCase {
 
   constructor(
@@ -18,6 +21,12 @@ export class CreatePatientUseCase {
   ) {}
 
   public async ejecutar(datos: CreatePatientDTO): Promise<Paciente> {
+    
+    // ✅ NUEVO: Validar firma digital
+    const validationResult = SignatureValidator.validate(datos.firmaDigital);
+    if (!validationResult.valid) {
+      throw new Error(validationResult.error);
+    }
     
     // 1. Crear la entidad (Validación de reglas de negocio)
     const nuevoPaciente = Paciente.crear({
@@ -34,10 +43,10 @@ export class CreatePatientUseCase {
       observaciones: datos.observaciones ? [datos.observaciones] : [] // Conversión aquí
     });
 
-    // 2. Guardar en Base de Datos usando la interfaz corregida
-    await this.patientRepository.guardar(nuevoPaciente);
+    // 2. Guardar en Base de Datos y recibir la entidad actualizada con ID
+    const pacienteGuardado = await this.patientRepository.guardar(nuevoPaciente);
 
-    // 3. Devolver
-    return nuevoPaciente;
+    // 3. Devolver el paciente guardado (con ID asignado)
+    return pacienteGuardado;
   }
 }

@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import { getConfig } from '../config/app.config'; // Importamos tu configuración para leer el secreto
 
 // Obtenemos la CLAVE SECRETA del .env (la "tinta especial" para firmar)
@@ -10,9 +10,9 @@ const SECRET = config.jwtSecret;
  * No guardes contraseñas aquí, solo identificación.
  */
 export interface UserPayload {
-  id: number;
+  id: string;
   email: string;
-  role: string; // 'ADMIN' | 'DOCTOR' | 'RECEPTIONIST'
+  role: string; // 'ADMIN' | 'DENTIST' | 'RECEPTIONIST' | 'PATIENT'
 }
 
 /**

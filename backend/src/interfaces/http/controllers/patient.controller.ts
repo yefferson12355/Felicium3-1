@@ -29,7 +29,53 @@ export class PatientController {
 
   // --- MÉTODO CREAR (Ya lo tenías) ---
   public async crearPaciente(req: Request, res: Response) {
-    // ... (Tu código de crearPaciente sigue igual) ...
+    try {
+      // 1. Mapear los campos del request a los campos del DTO
+      // Request viene en inglés, DTO espera español
+      const inputData: CreatePatientDTO = {
+        dni: req.body.dni || req.body.documentNumber || '',
+        nombre: req.body.firstName || req.body.nombre || '',
+        apellido: req.body.lastName || req.body.apellido || '',
+        email: req.body.email || '',
+        fechaNacimiento: req.body.dateBirth || req.body.fechaNacimiento || '',
+        firmaDigital: req.body.firmaDigital || '',
+        telefono: req.body.phone || req.body.telefono,
+        nombreApoderado: req.body.nombreApoderado,
+        direccion: req.body.address || req.body.direccion,
+        observaciones: req.body.observations || req.body.observaciones,
+        odontograma: req.body.odontograma || ''
+      };
+
+      // 2. Llama al Director (Caso de Uso)
+      const pacienteCreado = await this.createPatientUseCase.ejecutar(inputData);
+
+      // 3. Determinar el Rol del Usuario
+      const userRole = (req as any).user?.role;
+
+      // 4. Mapear la respuesta según el rol
+      const responseDTO: PatientReceptionistResponseDTO = PatientMapper.toDTO(pacienteCreado, userRole);
+
+      // 5. Enviar respuesta
+      return res.status(201).json({
+        success: true,
+        data: responseDTO,
+        message: 'Paciente creado exitosamente.'
+      });
+
+    } catch (error) {
+      // Manejo de Errores
+      if (error instanceof ValidationError) {
+         return res.status(400).json({ message: error.message });
+      }
+      if (error instanceof NotFoundError) {
+         return res.status(404).json({ message: error.message });
+      }
+      console.error('Error en crearPaciente:', error);
+      return res.status(500).json({ 
+        message: 'Error interno del servidor. Contacte a soporte.',
+        error: (error as any)?.message 
+      });
+    }
   }
 
   // --- NUEVO: MÉTODO GET POR ID ---

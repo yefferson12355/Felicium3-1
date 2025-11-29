@@ -1,0 +1,1 @@
+export { IAppointmentRepository } from './IAppointmentRepository';

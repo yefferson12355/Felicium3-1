@@ -28,8 +28,6 @@ services:
       context: ./backend
     container_name: dental-backend
     working_dir: /app
-    # 1. Instala paquetes si faltan (útil si agregaste algo nuevo).
-    # 2. Corre el script 'dev' que usa ts-node-dev.
     command: sh -c "npm install && npm run dev"
     
     ports:
@@ -56,16 +54,38 @@ services:
     networks:
       - dental-network
 
- 
-  #frontend:
-  #  build:
-  #  context: ./frontend
-  #  container_name: dental-frontend
-  # ports:
-  #  - "4200:80"
-  #  env_file: .env
-  #  networks:
-  #    - dental-network
+  # 🎨 FRONTEND (React)
+  frontend:
+    build:
+      context: ./frontend
+    container_name: dental-frontend
+    working_dir: /app
+    command: npm start
+    
+    ports:
+      - "3000:3000" # Accedes desde afuera por el 3000
+    
+    env_file: .env
+    environment:
+      - REACT_APP_API_URL=/api  # Usar proxy configurado en setupProxy.ts
+      - NODE_ENV=development
+    
+    # --- SINCRONIZACIÓN DE ARCHIVOS ---
+    volumes:
+      - ./frontend:/app           # Túnel: Tu código local se ve adentro
+      - /app/node_modules         # Burbuja: Protege las dependencias
+    
+    depends_on:
+      - backend
+    networks:
+      - dental-network
+    
+    # Espera a que el backend esté listo
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
