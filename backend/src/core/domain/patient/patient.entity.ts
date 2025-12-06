@@ -11,7 +11,7 @@ export class Paciente {
 
   // --- 2. PROPIEDADES (Los "Datos" del Paciente) ---
 
-  public readonly id: number | null;
+  public readonly id: string | null;
   public nombre: string;
   public apellido: string;
   public email: string;
@@ -36,7 +36,7 @@ export class Paciente {
    * ¡Así nos aseguramos que nadie cree un Paciente "inválido"!
    */
   private constructor(
-    id: number | null,
+    id: string | null,
     nombre: string,
     apellido: string,
     email: string,
@@ -138,7 +138,7 @@ export class Paciente {
    */
   public static crearExistente(
     datos: {
-      id: number,
+      id: string,
       nombre: string,
       apellido: string,
       email: string,

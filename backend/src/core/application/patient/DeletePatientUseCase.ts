@@ -4,7 +4,7 @@ import { ComportamientoPaciente } from '../../domain/patient/patient.behavior';
 export class DeletePatientUseCase {
   constructor(private readonly repository: IPatientRepository) {}
 
-  public async ejecutar(id: number): Promise<void> {
+  public async ejecutar(id: string): Promise<void> {
     // 1. Buscar
     const paciente = await this.repository.buscarPorId(id);
 

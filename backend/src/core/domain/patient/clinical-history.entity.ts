@@ -14,10 +14,10 @@ export class HistoriaClinica {
   // --- 2. PROPIEDADES (Los Datos de la "Carpeta") ---
 
   /** ID único de la base de datos (es 'null' si es nueva) */
-  public readonly id: number | null;
+  public readonly id: string | null;
   
   /** ID del Paciente al que pertenece esta carpeta (Relación 1-a-1) */
-  public readonly idPaciente: number; // ¡Obligatorio!
+  public readonly idPaciente: string; // ¡Obligatorio!
 
   // --- Tus campos de "Antecedentes" (llena la Recepcionista) ---
   // Usamos "Tipos Literales" para forzar los valores 'SI', 'NO', o 'NO_SABE'
@@ -45,8 +45,8 @@ export class HistoriaClinica {
 
   // --- 3. CONSTRUCTOR PRIVADO (La "Puerta Cerrada") ---
   private constructor(
-    id: number | null,
-    idPaciente: number,
+    id: string | null,
+    idPaciente: string,
     antecedenteAlergias: 'SI' | 'NO' | 'NO_SABE',
     antecedenteDiabetes: 'SI' | 'NO' | 'NO_SABE',
     antecedenteHipertension: 'SI' | 'NO' | 'NO_SABE',
@@ -72,7 +72,7 @@ export class HistoriaClinica {
   public static crear(
     datos: {
       // Requeridos
-      idPaciente: number, // Una "Carpeta" no puede existir sin un "Dueño"
+      idPaciente: string, // Una "Carpeta" no puede existir sin un "Dueño"
       antecedenteAlergias: 'SI' | 'NO' | 'NO_SABE',
       antecedenteDiabetes: 'SI' | 'NO' | 'NO_SABE',
       antecedenteHipertension: 'SI' | 'NO' | 'NO_SABE',
@@ -108,8 +108,8 @@ export class HistoriaClinica {
    */
   public static crearExistente(
     datos: {
-      id: number,
-      idPaciente: number,
+      id: string,
+      idPaciente: string,
       antecedenteAlergias: 'SI' | 'NO' | 'NO_SABE',
       antecedenteDiabetes: 'SI' | 'NO' | 'NO_SABE',
       antecedenteHipertension: 'SI' | 'NO' | 'NO_SABE',

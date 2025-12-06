@@ -4,7 +4,7 @@ import { Paciente } from '../../domain/patient/patient.entity';
 export class GetPatientByIdUseCase {
   constructor(private readonly repository: IPatientRepository) {}
 
-  public async ejecutar(id: number): Promise<Paciente> {
+  public async ejecutar(id: string): Promise<Paciente> {
     const paciente = await this.repository.buscarPorId(id);
 
     if (!paciente) {

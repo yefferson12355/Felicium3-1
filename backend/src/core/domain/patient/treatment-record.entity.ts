@@ -13,16 +13,16 @@ export class RegistroTratamiento {
   // --- 2. PROPIEDADES (Los Datos de la "Página") ---
 
   /** ID único de este registro (es 'null' si es nuevo) */
-  public readonly id: number | null;
+  public readonly id: string | null;
   
   /** ID de la "Carpeta" (HistoriaClinica) a la que pertenece (Relación N-a-1) */
-  public readonly idHistoriaClinica: number; // ¡Obligatorio!
+  public readonly idHistoriaClinica: string; // ¡Obligatorio!
 
   /** ID del Doctor que realizó este registro */
-  public readonly idDoctor: number; // ¡Obligatorio!
+  public readonly idDoctor: string; // ¡Obligatorio!
 
   /** ID de la Cita asociada a este registro (opcional pero recomendado) */
-  public readonly idCita?: number | null;
+  public readonly idCita?: string | null;
   
   /** El diagnóstico del Doctor en esta visita */
   public diagnostico: string;
@@ -41,15 +41,15 @@ export class RegistroTratamiento {
 
   // --- 3. CONSTRUCTOR PRIVADO (La "Puerta Cerrada") ---
   private constructor(
-    id: number | null,
-    idHistoriaClinica: number,
-    idDoctor: number,
+    id: string | null,
+    idHistoriaClinica: string,
+    idDoctor: string,
     diagnostico: string,
     procedimientoRealizado: string | null,
     observacionesDoctor: string | null,
     fechaRegistro: Date,
     fechaActualizacion: Date,
-    idCita?: number | null
+    idCita?: string | null
   ) {
     this.id = id;
     this.idHistoriaClinica = idHistoriaClinica;
@@ -71,14 +71,14 @@ export class RegistroTratamiento {
   public static crear(
     datos: {
       // Requeridos
-      idHistoriaClinica: number, // Debe pertenecer a una "Carpeta"
-      idDoctor: number,          // Un Doctor debe firmarlo
+      idHistoriaClinica: string, // Debe pertenecer a una "Carpeta"
+      idDoctor: string,          // Un Doctor debe firmarlo
       diagnostico: string,       // El hallazgo principal
       
       // Opcionales
       procedimientoRealizado?: string | null,
       observacionesDoctor?: string | null,
-      idCita?: number | null
+      idCita?: string | null
     }
   ): RegistroTratamiento {
     
@@ -116,15 +116,15 @@ export class RegistroTratamiento {
    */
   public static crearExistente(
     datos: {
-      id: number,
-      idHistoriaClinica: number,
-      idDoctor: number,
+      id: string,
+      idHistoriaClinica: string,
+      idDoctor: string,
       diagnostico: string,
       procedimientoRealizado: string | null,
       observacionesDoctor: string | null,
       fechaRegistro: Date,
       fechaActualizacion: Date,
-      idCita?: number | null
+      idCita?: string | null
     }
   ): RegistroTratamiento {
     // Simplemente llama al constructor privado con los datos de la BD

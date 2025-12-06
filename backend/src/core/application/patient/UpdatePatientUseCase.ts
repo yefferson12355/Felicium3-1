@@ -10,7 +10,7 @@ import { SignatureValidator } from '../../../shared/validators/signature.validat
 export class UpdatePatientUseCase {
   constructor(private readonly repository: IPatientRepository) {}
 
-  public async ejecutar(id: number, datos: UpdatePatientDTO): Promise<Paciente> {
+  public async ejecutar(id: string, datos: UpdatePatientDTO): Promise<Paciente> {
     // 1. Buscar al paciente actual
     const paciente = await this.repository.buscarPorId(id);
 
