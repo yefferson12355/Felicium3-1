@@ -4,8 +4,41 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
-// Mock axios globally
-jest.mock('axios');
+// Mock axios globally with full functionality
+jest.mock('axios', () => {
+  const mockAxiosInstance = {
+    get: jest.fn(() => Promise.resolve({ data: {} })),
+    post: jest.fn(() => Promise.resolve({ data: {} })),
+    put: jest.fn(() => Promise.resolve({ data: {} })),
+    patch: jest.fn(() => Promise.resolve({ data: {} })),
+    delete: jest.fn(() => Promise.resolve({ data: {} })),
+    interceptors: {
+      request: {
+        use: jest.fn(),
+        eject: jest.fn(),
+      },
+      response: {
+        use: jest.fn(),
+        eject: jest.fn(),
+      },
+    },
+    defaults: {
+      headers: {
+        common: {},
+      },
+    },
+  };
+
+  return {
+    __esModule: true,
+    default: {
+      create: jest.fn(() => mockAxiosInstance),
+      ...mockAxiosInstance,
+    },
+    create: jest.fn(() => mockAxiosInstance),
+    ...mockAxiosInstance,
+  };
+});
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
