@@ -2,12 +2,20 @@
 
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken as verifyJwtToken } from '../../../infrastructure/auth/JwtService';
+import { UnauthorizedError, InvalidTokenError } from '../../../shared/errors';
 
+/**
+ * Middleware de autenticación
+ * 
+ * Verifica el token JWT en el header Authorization.
+ * Los errores se propagan al globalErrorHandler para formato consistente.
+ */
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization?.split(' ')[1];
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ message: 'Acceso denegado. Se requiere autenticación.' });
+    return next(new UnauthorizedError('Acceso denegado. Se requiere autenticación.'));
   }
 
   try {
@@ -21,7 +29,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
     next();
   } catch (error) {
     // Si la verificación falla (token expirado o inválido)
-    return res.status(401).json({ message: 'Token inválido o expirado.' });
+    return next(new InvalidTokenError());
   }
 };
 
