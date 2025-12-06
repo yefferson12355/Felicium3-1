@@ -1,6 +1,7 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { DashboardController } from '../controllers/dashboard.controller';
 import { verifyToken } from '../../../infrastructure/auth/JwtMiddleware';
+import { asyncHandler } from '../middlewares/global-error.middleware';
 
 /**
  * Dashboard Routes
@@ -17,30 +18,30 @@ export const createDashboardRoutes = (dashboardController: DashboardController):
   /**
    * GET /stats - Estadísticas generales del dashboard
    */
-  router.get('/stats', verifyToken, (req: Request, res: Response) =>
-    dashboardController.getStats(req, res)
-  );
+  router.get('/stats', verifyToken, asyncHandler((req: Request, res: Response, next: NextFunction) =>
+    dashboardController.getStats(req, res, next)
+  ));
 
   /**
    * GET /stats/appointments - Estadísticas de citas
    */
-  router.get('/stats/appointments', verifyToken, (req: Request, res: Response) =>
-    dashboardController.getAppointmentStats(req, res)
-  );
+  router.get('/stats/appointments', verifyToken, asyncHandler((req: Request, res: Response, next: NextFunction) =>
+    dashboardController.getAppointmentStats(req, res, next)
+  ));
 
   /**
    * GET /stats/revenue - Estadísticas de ingresos
    */
-  router.get('/stats/revenue', verifyToken, (req: Request, res: Response) =>
-    dashboardController.getRevenueStats(req, res)
-  );
+  router.get('/stats/revenue', verifyToken, asyncHandler((req: Request, res: Response, next: NextFunction) =>
+    dashboardController.getRevenueStats(req, res, next)
+  ));
 
   /**
    * GET /stats/patients - Estadísticas de pacientes
    */
-  router.get('/stats/patients', verifyToken, (req: Request, res: Response) =>
-    dashboardController.getPatientStats(req, res)
-  );
+  router.get('/stats/patients', verifyToken, asyncHandler((req: Request, res: Response, next: NextFunction) =>
+    dashboardController.getPatientStats(req, res, next)
+  ));
 
   return router;
 };

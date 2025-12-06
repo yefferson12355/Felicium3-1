@@ -1,5 +1,6 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { OdontogramController } from '../controllers/odontogram.controller';
+import { asyncHandler } from '../middlewares/global-error.middleware';
 
 /**
  * OdontogramRoutes
@@ -19,15 +20,10 @@ export function createOdontogramRoutes(controller: OdontogramController): Router
   /**
    * POST /api/odontogram
    * Crear nuevo odontograma
-   * 
-   * Body:
-   * {
-   *   "patientId": "patient-123",
-   *   "patientAge": 35,
-   *   "dentureType": "PERMANENT"
-   * }
    */
-  router.post('/', (req, res) => controller.createOdontogram(req, res));
+  router.post('/', asyncHandler((req: Request, res: Response, next: NextFunction) =>
+    controller.createOdontogram(req, res, next)
+  ));
 
   /**
    * GET /api/odontogram/patient/:patientId
@@ -35,34 +31,33 @@ export function createOdontogramRoutes(controller: OdontogramController): Router
    * IMPORTANTE: Esta ruta DEBE ir antes de /:id
    * porque si no, "/patient/123" sería interpretado como "/:id" con id="patient"
    */
-  router.get('/patient/:patientId', (req, res) =>
-    controller.getOdontogramByPatient(req, res)
-  );
+  router.get('/patient/:patientId', asyncHandler((req: Request, res: Response, next: NextFunction) =>
+    controller.getOdontogramByPatient(req, res, next)
+  ));
 
   /**
    * GET /api/odontogram/:id
    * Obtener odontograma por su ID
    */
-  router.get('/:id', (req, res) => controller.getOdontogramById(req, res));
+  router.get('/:id', asyncHandler((req: Request, res: Response, next: NextFunction) =>
+    controller.getOdontogramById(req, res, next)
+  ));
 
   /**
    * PUT /api/odontogram/:id
    * Actualizar un diente en el odontograma
-   * 
-   * Body:
-   * {
-   *   "toothNumber": 11,
-   *   "newState": "CARIES",
-   *   "notes": "Caries detectada"
-   * }
    */
-  router.put('/:id', (req, res) => controller.updateOdontogram(req, res));
+  router.put('/:id', asyncHandler((req: Request, res: Response, next: NextFunction) =>
+    controller.updateOdontogram(req, res, next)
+  ));
 
   /**
    * DELETE /api/odontogram/:id
    * Eliminar odontograma
    */
-  router.delete('/:id', (req, res) => controller.deleteOdontogram(req, res));
+  router.delete('/:id', asyncHandler((req: Request, res: Response, next: NextFunction) =>
+    controller.deleteOdontogram(req, res, next)
+  ));
 
   return router;
 }

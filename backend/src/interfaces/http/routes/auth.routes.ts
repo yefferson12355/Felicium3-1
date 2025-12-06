@@ -1,6 +1,10 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { AuthController } from '../controllers/auth.controller';
 import { verifyToken } from '../middlewares/auth.middleware';
+import { validateDto } from '../middlewares/validation.middleware';
+import { asyncHandler } from '../middlewares/global-error.middleware';
+import { LoginDTO } from '../dtos/auth/LoginDTO';
+import { RegisterDTO } from '../dtos/auth/RegisterDTO';
 
 /**
  * Create Auth routes
@@ -8,44 +12,50 @@ import { verifyToken } from '../middlewares/auth.middleware';
 export const createAuthRoutes = (authController: AuthController): Router => {
   const router = Router();
 
-  // Middleware para loguear requests a auth
-  router.use((req, res, next) => {
-    console.log(`[AUTH] ${req.method} ${req.path}`);
-    next();
-  });
-
   /**
    * POST /auth/register
    * Register a new user
+   * Validación: RegisterDTO verifica email, password fuerte, nombres
    */
-  router.post('/register', (req: Request, res: Response) => {
-    console.log('[AUTH-REGISTER] Handling register request');
-    authController.register(req, res);
-  });
+  router.post('/register', 
+    validateDto(RegisterDTO),
+    asyncHandler((req: Request, res: Response, next: NextFunction) =>
+      authController.register(req, res, next)
+    )
+  );
 
   /**
    * POST /auth/login
    * Login with email and password
+   * Validación: LoginDTO verifica email y password
    */
-  router.post('/login', (req: Request, res: Response) => {
-    console.log('[AUTH-LOGIN] Handling login request');
-    authController.login(req, res);
-  });
+  router.post('/login', 
+    validateDto(LoginDTO),
+    asyncHandler((req: Request, res: Response, next: NextFunction) =>
+      authController.login(req, res, next)
+    )
+  );
 
   /**
    * POST /auth/logout
    * Logout (requires authentication)
    */
-  router.post('/logout', verifyToken, (req: Request, res: Response) =>
-    authController.logout(req, res)
+  router.post('/logout', 
+    verifyToken, 
+    asyncHandler((req: Request, res: Response, next: NextFunction) =>
+      authController.logout(req, res, next)
+    )
   );
 
   /**
    * GET /auth/me
    * Get current user from token (requires authentication)
    */
-  router.get('/me', verifyToken, (req: Request, res: Response) =>
-    authController.getCurrentUser(req, res)
+  router.get('/me', 
+    verifyToken, 
+    asyncHandler((req: Request, res: Response, next: NextFunction) =>
+      authController.getCurrentUser(req, res, next)
+    )
   );
 
   return router;
