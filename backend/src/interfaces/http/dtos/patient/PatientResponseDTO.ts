@@ -1,7 +1,7 @@
 //  // DTO de respuesta para el ADMINISTRADOR
 export interface PatientAdminResponseDTO {
     //el admin debe tener acceso a todos los campos
-	id: number;
+	id: string;
 	dni: string;
 	nombre: string;
 	apellido: string;
@@ -21,7 +21,7 @@ export interface PatientAdminResponseDTO {
 
 // DTO de respuesta para el DOCTOR
 export interface PatientDoctorResponseDTO {
-	id: number;
+	id: string;
 	dni: string;
 	nombre: string;
 	apellido: string;
@@ -36,7 +36,7 @@ export interface PatientDoctorResponseDTO {
 
 // DTO de respuesta para la RECEPCIONISTA
 export interface PatientReceptionistResponseDTO {
-	id: number;
+	id: string;
 	dni: string;
 	nombre: string;
 	apellido: string;
@@ -51,7 +51,7 @@ export interface PatientReceptionistResponseDTO {
 
 // DTO de respuesta para el PACIENTE
 export interface PatientSelfResponseDTO {
-	id: number;
+	id: string;
 	dni: string;
 	nombre: string;
 	apellido: string;
