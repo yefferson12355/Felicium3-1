@@ -1,6 +1,18 @@
-import React from 'react';
+import React, { CSSProperties, InputHTMLAttributes } from 'react';
 
-const InputField = ({
+interface InputFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'style'> {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
+  type?: string;
+  placeholder?: string;
+  required?: boolean;
+  style?: CSSProperties;
+}
+
+const InputField: React.FC<InputFieldProps> = ({
   label,
   name,
   value,

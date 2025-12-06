@@ -137,8 +137,8 @@ const BusquedaRapidaPacientes = () => {
                   justifyContent: 'space-between',
                   alignItems: 'center'
                 }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = '#FAFBFC'}
-                onMouseLeave={(e) => e.target.style.backgroundColor = 'white'}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#FAFBFC')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'white')}
               >
                 <div>
                   <div style={{ fontWeight: 500, color: '#172B4D' }}>

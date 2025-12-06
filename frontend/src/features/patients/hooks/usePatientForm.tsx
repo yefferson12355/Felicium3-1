@@ -1,7 +1,29 @@
 import { useState } from 'react';
 
-export const usePatientForm = (initialData = {}) => {
-  const [formData, setFormData] = useState({
+interface PatientFormData {
+  dni: string;
+  nombre: string;
+  apellido: string;
+  fecha_nacimiento: string;
+  celular: string;
+  ciudad: string;
+  direccion: string;
+  email: string;
+  sexo: string;
+  observaciones: string;
+  convenio: string;
+  dentista_cargo: string;
+  apoderado: string;
+  departamento: string;
+  [key: string]: any;
+}
+
+interface FormErrors {
+  [key: string]: string;
+}
+
+export const usePatientForm = (initialData: Partial<PatientFormData> = {}) => {
+  const [formData, setFormData] = useState<PatientFormData>({
     dni: '',
     nombre: '',
     apellido: '',
@@ -19,9 +41,9 @@ export const usePatientForm = (initialData = {}) => {
     ...initialData
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<FormErrors>({});
 
-  const updateField = (name, value) => {
+  const updateField = (name: string, value: any) => {
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -36,12 +58,12 @@ export const usePatientForm = (initialData = {}) => {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     updateField(name, value);
   };
 
-  const resetForm = (data = {}) => {
+  const resetForm = (data: Partial<PatientFormData> = {}) => {
     setFormData({
       dni: '',
       nombre: '',

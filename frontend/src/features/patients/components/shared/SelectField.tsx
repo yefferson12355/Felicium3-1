@@ -1,6 +1,24 @@
-import React from 'react';
+import React, { CSSProperties, ReactNode } from 'react';
 
-const SelectField = ({
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
+interface SelectFieldProps {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  error?: string;
+  options?: SelectOption[];
+  placeholder?: string;
+  required?: boolean;
+  style?: CSSProperties;
+  children?: ReactNode;
+}
+
+const SelectField: React.FC<SelectFieldProps> = ({
   label,
   name,
   value,
@@ -40,8 +58,8 @@ const SelectField = ({
         {placeholder && <option value="">{placeholder}</option>}
         {options.length > 0
           ? options.map((option, index) => (
-              <option key={option.value || option.label || option || index} value={option.value || option}>
-                {option.label || option}
+              <option key={option.value || index} value={option.value}>
+                {option.label}
               </option>
             ))
           : children

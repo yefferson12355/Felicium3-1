@@ -1,6 +1,18 @@
-import React from 'react';
+import React, { CSSProperties, TextareaHTMLAttributes } from 'react';
 
-const TextareaField = ({
+interface TextareaFieldProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'style'> {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  error?: string;
+  placeholder?: string;
+  rows?: number;
+  cols?: number;
+  style?: CSSProperties;
+}
+
+const TextareaField: React.FC<TextareaFieldProps> = ({
   label,
   name,
   value,

@@ -46,11 +46,12 @@ const Login = () => {
       try {
         const result = await login({ email, password });
 
-        if (result.success) {
+        if (result.success && result.user) {
           console.log('Login successful with user:', result.user);
           
           // Usar roleMapper centralizado
           const roleRoute = getRoleRoute(result.user.role);
+          console.log('Navigating to role route:', roleRoute);
           
           // Navegar usando hash (mantiene compatibilidad con HashRouter)
           window.location.hash = `#${roleRoute}`;

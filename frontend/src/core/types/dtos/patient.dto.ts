@@ -12,6 +12,7 @@ export interface CreatePatientDTO {
   telefono?: string;
   direccion?: string;
   nombreApoderado?: string;
+  firmaDigital?: string;
 }
 
 export interface UpdatePatientDTO {

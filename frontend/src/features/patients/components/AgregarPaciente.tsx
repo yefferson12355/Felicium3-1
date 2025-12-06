@@ -33,7 +33,7 @@ const AgregarPaciente = () => {
     { value: 'Loreto', label: 'Loreto' }
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationErrors = validateForm(formData);

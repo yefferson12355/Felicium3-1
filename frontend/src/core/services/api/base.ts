@@ -37,6 +37,16 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => {
     console.log('✅ API Response successful:', response.status, response.config.url);
+    
+    // El backend devuelve { success: true, data: {...} }
+    // Extraemos automáticamente el campo 'data' si existe
+    if (response.data && typeof response.data === 'object') {
+      if ('success' in response.data && 'data' in response.data) {
+        // Respuesta envuelta del backend - extraer data
+        response.data = response.data.data;
+      }
+    }
+    
     return response;
   },
   (error) => {

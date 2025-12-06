@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 
-const DetallesPaciente = ({ patient, onClose }) => {
+interface DetallesPacienteProps {
+  patient: any;
+  onClose: () => void;
+}
+
+const DetallesPaciente: React.FC<DetallesPacienteProps> = ({ patient, onClose }) => {
   if (!patient) return null;
 
-  const styles = {
+  const styles: Record<string, CSSProperties> = {
     overlay: {
       position: 'fixed',
       top: 0,
@@ -68,7 +73,7 @@ const DetallesPaciente = ({ patient, onClose }) => {
     },
     field: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column' as const,
       gap: '4px'
     },
     fieldLabel: {
@@ -91,7 +96,7 @@ const DetallesPaciente = ({ patient, onClose }) => {
       borderRadius: '8px',
       padding: '16px',
       backgroundColor: '#FAFBFC',
-      textAlign: 'center'
+      textAlign: 'center' as const
     },
     signatureImage: {
       maxWidth: '100%',
@@ -277,8 +282,8 @@ const DetallesPaciente = ({ patient, onClose }) => {
           <button 
             style={styles.button}
             onClick={onClose}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#0747A6'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = '#0052CC'}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#0747A6')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0052CC')}
           >
             Cerrar
           </button>

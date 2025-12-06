@@ -40,6 +40,7 @@ class AxiosAuthRepository implements IAuthRepository {
     try {
       console.log('🌐 authRepository.login() called');
       const response = await apiClient.post<LoginResponseDTO>('/auth/login', credentials);
+      // El interceptor de base.ts ya extrae data de { success, data }
       return response.data;
     } catch (error) {
       console.error('❌ Login failed:', error);
