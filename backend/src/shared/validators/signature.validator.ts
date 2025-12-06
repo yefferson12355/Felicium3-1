@@ -24,12 +24,36 @@ export class SignatureValidator {
   private static readonly URL_REGEX = /^(https?:\/\/.+\.(png|jpg|jpeg|gif|webp))$/i;
 
   /**
+   * Patrón para detectar y extraer Base64 de un Data URL
+   * Ejemplo: data:image/png;base64,iVBORw0KGgo...
+   */
+  private static readonly DATA_URL_REGEX = /^data:image\/[a-zA-Z]+;base64,(.+)$/;
+
+  /**
+   * Extrae la parte Base64 pura de un string
+   * Si tiene prefijo data:image/...;base64, lo elimina
+   * @param signature String con posible prefijo Data URL
+   * @returns String Base64 puro
+   */
+  static extractBase64(signature: string): string {
+    if (!signature) return '';
+    
+    const match = signature.match(this.DATA_URL_REGEX);
+    if (match && match[1]) {
+      return match[1]; // Retorna solo la parte Base64
+    }
+    return signature; // Ya es Base64 puro
+  }
+
+  /**
    * Valida si el string es Base64 válido
+   * Acepta tanto Base64 puro como Data URLs (data:image/png;base64,...)
    * @param signature String a validar
    * @returns true si es Base64 válido, false si no
    *
    * @example
    * SignatureValidator.isValidBase64('iVBORw0KGgoA...'); // true
+   * SignatureValidator.isValidBase64('data:image/png;base64,iVBORw0KGgoA...'); // true
    * SignatureValidator.isValidBase64('hola123'); // false
    * SignatureValidator.isValidBase64(''); // false
    */
@@ -39,14 +63,17 @@ export class SignatureValidator {
       return false;
     }
 
+    // Extraer Base64 puro (eliminar prefijo data:image si existe)
+    const base64Pure = this.extractBase64(signature);
+
     // Debe cumplir patrón Base64
-    if (!this.BASE64_REGEX.test(signature)) {
+    if (!this.BASE64_REGEX.test(base64Pure)) {
       return false;
     }
 
     // Mínimo de caracteres (al menos 64 chars = aprox 48 bytes)
     // Una firma válida debe tener al menos 64 caracteres
-    if (signature.length < 64) {
+    if (base64Pure.length < 64) {
       return false;
     }
 
@@ -56,7 +83,7 @@ export class SignatureValidator {
   /**
    * Calcula el tamaño en bytes de un string Base64
    * 4 caracteres Base64 = 24 bits = 3 bytes
-   * @param signature String Base64
+   * @param signature String Base64 (acepta Data URLs)
    * @returns Tamaño en bytes
    *
    * @example
@@ -67,11 +94,14 @@ export class SignatureValidator {
       return 0;
     }
 
+    // Extraer Base64 puro
+    const base64Pure = this.extractBase64(signature);
+
     // Contar caracteres de relleno (=)
-    const padding = (signature.match(/=/g) || []).length;
+    const padding = (base64Pure.match(/=/g) || []).length;
 
     // Fórmula: (largo * 3) / 4 - padding
-    return Math.ceil((signature.length * 3) / 4) - padding;
+    return Math.ceil((base64Pure.length * 3) / 4) - padding;
   }
 
   /**
