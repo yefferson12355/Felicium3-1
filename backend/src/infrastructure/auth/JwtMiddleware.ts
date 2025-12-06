@@ -1,10 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken as verifyTokenJwt } from './JwtService';
+import { UnauthorizedError, InvalidTokenError } from '../../shared/errors';
 
 /**
  * JWT Middleware - Verifica el token JWT en el header Authorization
  * 
  * Uso: router.get('/protected', verifyToken, controller.method)
+ * 
+ * Los errores se propagan al globalErrorHandler para formato consistente.
  */
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
@@ -12,17 +15,13 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): vo
     const authHeader = req.headers.authorization;
     
     if (!authHeader) {
-      console.log('❌ No authorization header provided');
-      res.status(401).json({ error: 'No token provided' });
-      return;
+      throw new UnauthorizedError('Token no proporcionado');
     }
 
     // Extract token from "Bearer <token>"
     const parts = authHeader.split(' ');
     if (parts.length !== 2 || parts[0] !== 'Bearer') {
-      console.log('❌ Invalid authorization header format');
-      res.status(401).json({ error: 'Invalid token format' });
-      return;
+      throw new UnauthorizedError('Formato de token inválido. Use: Bearer <token>');
     }
 
     const token = parts[1];
@@ -33,11 +32,15 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): vo
     // Add user info to request
     (req as any).user = decoded;
     
-    console.log('✅ Token verified for user:', decoded.id);
     next();
   } catch (error: any) {
-    console.log('❌ Token verification failed:', error.message);
-    res.status(401).json({ error: 'Invalid or expired token' });
+    // Si ya es un error de nuestra aplicación, propagarlo
+    if (error.statusCode) {
+      next(error);
+      return;
+    }
+    // Si es un error de JWT, convertirlo
+    next(new InvalidTokenError());
   }
 };
 
