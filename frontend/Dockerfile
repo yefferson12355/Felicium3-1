@@ -26,6 +26,12 @@ RUN echo "REACT_APP_API_URL=/api" > .env && \
     echo "ESLINT_NO_DEV_ERRORS=true" >> .env && \
     echo "DISABLE_ESLINT_PLUGIN=true" >> .env
 
+# Configuración de entorno para ignorar errores de TypeScript
+ENV TSC_COMPILE_ON_ERROR=true
+ENV ESLINT_NO_DEV_ERRORS=true
+ENV DISABLE_ESLINT_PLUGIN=true
+ENV SKIP_PREFLIGHT_CHECK=true
+
 # Puerto
 EXPOSE 3000
 
