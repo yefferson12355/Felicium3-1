@@ -1,11 +1,87 @@
-# Ignore all files in the project_docs directory 
-backend/project_docs/*
+# =============================================
+# ARCHIVOS QUE NO DEBEN SUBIRSE A GIT
+# =============================================
 
-#Ignorar archivos dentro de backend 
+# ------------------------------
+# 📦 DEPENDENCIAS (node_modules)
+# ------------------------------
+# Son muy pesados (+200MB) y se regeneran con `npm install`
+node_modules/
+*/node_modules/
+
+# ------------------------------
+# 🔐 VARIABLES DE ENTORNO
+# ------------------------------
+# Contienen credenciales, claves secretas, passwords de BD
+# NUNCA subir a Git por seguridad
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+backend/.env
+frontend/.env
+
+# ------------------------------
+# 📊 COVERAGE DE TESTS
+# ------------------------------
+# Se genera automáticamente con `npm test -- --coverage`
+# No es código fuente, solo reportes
+coverage/
+backend/coverage/
+frontend/coverage/
+*.lcov
+
+# ------------------------------
+# 🏗️ BUILD Y COMPILACIÓN
+# ------------------------------
+# Archivos generados, se recrean con `npm run build`
+dist/
+build/
+backend/dist/
+frontend/build/
+*.tsbuildinfo
+
+# ------------------------------
+# 📝 LOGS
+# ------------------------------
+# Archivos de registro, no son necesarios en el repo
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ------------------------------
+# 💾 ARCHIVOS COMPRIMIDOS
+# ------------------------------
+# Backups y archivos pesados
+*.tar.gz
+*.zip
+*.rar
+
+# ------------------------------
+# 🖥️ ARCHIVOS DE SISTEMA/IDE
+# ------------------------------
+# Configuraciones locales de cada desarrollador
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ------------------------------
+# 📄 DOCUMENTACIÓN INTERNA
+# ------------------------------
+# Notas personales del proyecto
+backend/project_docs/*
 backend/Arquitetura.txt
 
-# Dependencias
-node_modules/
-
-# Variables de entorno (claves secretas)
-.env
+# ------------------------------
+# 🐳 DOCKER (opcional)
+# ------------------------------
+# Volúmenes de datos de Docker (si existen localmente)
+postgres_data/
+docker-data/
