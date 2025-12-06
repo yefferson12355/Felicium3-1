@@ -1,3 +1,7 @@
+// Importar reflect-metadata ANTES de cualquier otra cosa
+// Requerido por class-validator y class-transformer para los decoradores
+import 'reflect-metadata';
+
 import app from './app'; // Importa la aplicación configurada (el motor)
 import { connectDB } from './infrastructure/config/database.config'; // <-- Dependemos de este archivo
 import { getConfig } from './infrastructure/config/app.config';

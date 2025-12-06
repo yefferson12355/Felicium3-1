@@ -52,7 +52,9 @@ export const deletePatientUseCase = new DeletePatientUseCase(patientRepository);
 export const patientController = new PatientController(
   createPatientUseCase,
   getPatientByIdUseCase,
-  listPatientUseCase
+  listPatientUseCase,
+  updatePatientUseCase,
+  deletePatientUseCase
 );
 
 // --- D. AUTH - Repositorios ---

@@ -5,38 +5,36 @@ import { mainRouter } from './interfaces/http/routes/index.routes';
 import { patientController } from './di/dependency-container'; 
 // Importamos la función que crea las rutas específicas para pacientes
 import { PatientRouter } from './interfaces/http/routes/patient.routes'; 
-import { errorHandler } from './interfaces/http/middlewares/error-handler.middleware';
+import { corsMiddleware } from './interfaces/http/middlewares/cors.middleware';
+import { globalErrorHandler, notFoundHandler } from './interfaces/http/middlewares/global-error.middleware';
 
 /**
  * Función que configura la aplicación Express
  */
 const app: Application = express();
 
-// --- Middlewares de Parseo y Seguridad ---
+// --- Middlewares de Seguridad (CORS debe ir primero) ---
+// CORS seguro - valida orígenes permitidos
+app.use(corsMiddleware);
+
+// --- Middlewares de Parseo ---
 // JSON parser middleware
 app.use(express.json({ limit: '50mb' }));
 
 // URL-encoded parser middleware
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// CORS headers (basic)
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
-});
-
 // --- Ensamblaje de Rutas ---
 
 // Montamos el router principal con todas las rutas (auth, pacientes, citas, odontogramas)
 app.use('/api', mainRouter);
 
-// Middleware de Manejo de Errores (DEBE ir al final)
-app.use(errorHandler); 
+// --- Manejo de Errores (DEBE ir al final) ---
+
+// 404 - Ruta no encontrada (debe ir después de todas las rutas)
+app.use(notFoundHandler);
+
+// Global Error Handler (DEBE ser el último middleware)
+app.use(globalErrorHandler); 
 
 export default app;
